@@ -9,32 +9,63 @@
       direction: rtl;
       margin: 20px;
     }
+
+    .top-section {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .filter-box {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .summary-box {
+      flex: 0 0 40%;
+      min-width: 280px;
+      max-width: 400px;
+    }
+
+    input {
+      margin: 5px 0;
+      padding: 6px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      margin-top: 10px;
     }
+
     th, td {
       border: 1px solid #ddd;
       padding: 8px;
       text-align: right;
     }
+
     th {
       background-color: #f2f2f2;
     }
-    input {
-      margin: 5px;
-      padding: 5px;
-    }
-    .filter-section {
-      margin-bottom: 20px;
-    }
+
     a {
       color: #0645ad;
       text-decoration: none;
     }
+
     a:hover {
       text-decoration: underline;
+    }
+
+    h1, h2 {
+      margin-top: 0;
+    }
+
+    .main-table {
+      margin-top: 30px;
     }
   </style>
 </head>
@@ -42,46 +73,54 @@
 
   <h1>עריכות אחרונות בוויקיפדיה</h1>
 
-  <div class="filter-section">
-    <label for="editorFilter">סנן לפי עורך:</label>
-    <input type="text" id="editorFilter" onkeyup="filterTable()" placeholder="שם העורך">
+  <div class="top-section">
+    <!-- סינון -->
+    <div class="filter-box">
+      <label for="editorFilter">סנן לפי עורך:</label>
+      <input type="text" id="editorFilter" onkeyup="filterTable()" placeholder="שם העורך">
 
-    <label for="pageFilter">סנן לפי שם הערך:</label>
-    <input type="text" id="pageFilter" onkeyup="filterTable()" placeholder="שם הערך">
+      <label for="pageFilter">סנן לפי שם הערך:</label>
+      <input type="text" id="pageFilter" onkeyup="filterTable()" placeholder="שם הערך">
+    </div>
+
+    <!-- סיכום -->
+    <div class="summary-box">
+      <h2>10 הערכים עם הכי הרבה עריכות</h2>
+      <table id="summaryTable">
+        <thead>
+          <tr>
+            <th>שם הערך</th>
+            <th>מספר</th>
+            <th>זמן אחרון</th>
+            <th>קישור</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- נתונים ייכנסו כאן -->
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <table id="editsTable">
-    <thead>
-      <tr>
-        <th>שם הערך</th>
-        <th>זמן העריכה</th>
-        <th>הערות</th>
-        <th>גודל השינוי</th>
-        <th>קישור להבדל</th>
-        <th>קישור לערך</th>
-        <th>שם העורך</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- הנתונים יתווספו כאן -->
-    </tbody>
-  </table>
-
-  <h2>10 הערכים עם הכי הרבה עריכות</h2>
-
-  <table id="summaryTable">
-    <thead>
-      <tr>
-        <th>שם הערך</th>
-        <th>מספר עריכות</th>
-        <th>זמן עריכה אחרון</th>
-        <th>קישור לערך</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- הנתונים יתווספו כאן -->
-    </tbody>
-  </table>
+  <!-- טבלת עריכות -->
+  <div class="main-table">
+    <table id="editsTable">
+      <thead>
+        <tr>
+          <th>שם הערך</th>
+          <th>זמן העריכה</th>
+          <th>הערות</th>
+          <th>גודל השינוי</th>
+          <th>קישור להבדל</th>
+          <th>קישור לערך</th>
+          <th>שם העורך</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- נתונים ייכנסו כאן -->
+      </tbody>
+    </table>
+  </div>
 
   <script>
     let allEdits = [];
@@ -182,8 +221,6 @@
     }
 
     init();
-
-    // רענון כל 30 שניות
     setInterval(init, 30000);
   </script>
 
