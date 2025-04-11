@@ -148,7 +148,7 @@
     let allEdits = [];
 
     async function fetchRecentChanges() {
-      const url = 'https://he.wikipedia.org/w/api.php?action=query&format=json&list=recentchanges&rcnamespace=0&rclimit=100&rcprop=title|ids|sizes|user|comment|timestamp&origin=*';
+      const url = 'https://he.wikipedia.org/w/api.php?action=query&format=json&list=recentchanges&rcnamespace=0&rclimit=500&rcprop=title|ids|sizes|user|comment|timestamp&origin=*';
       const response = await fetch(url);
       const data = await response.json();
       return data.query.recentchanges;
