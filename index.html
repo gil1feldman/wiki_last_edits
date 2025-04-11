@@ -29,6 +29,13 @@
     .filter-section {
       margin-bottom: 20px;
     }
+    a {
+      color: #0645ad;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -77,8 +84,10 @@
   </table>
 
   <script>
+    let allEdits = [];
+
     async function fetchRecentChanges() {
-      const url = 'https://he.wikipedia.org/w/api.php?action=query&format=json&list=recentchanges&rcnamespace=0&rclimit=100&origin=*';
+      const url = 'https://he.wikipedia.org/w/api.php?action=query&format=json&list=recentchanges&rcnamespace=0&rclimit=100&rcprop=title|ids|sizes|user|comment|timestamp&origin=*';
       const response = await fetch(url);
       const data = await response.json();
       return data.query.recentchanges;
@@ -90,14 +99,15 @@
 
       edits.forEach(edit => {
         const row = document.createElement('tr');
+        const sizeChange = (edit.newlen ?? 0) - (edit.oldlen ?? 0);
         row.innerHTML = `
           <td>${edit.title}</td>
-          <td>${new Date(edit.timestamp).toLocaleString()}</td>
+          <td>${new Date(edit.timestamp).toLocaleString('he-IL')}</td>
           <td>${edit.comment || ''}</td>
-          <td>${edit.newlen - edit.oldlen}</td>
+          <td>${sizeChange > 0 ? '+' : ''}${sizeChange}</td>
           <td><a href="https://he.wikipedia.org/w/index.php?diff=${edit.revid}" target="_blank">הבדל</a></td>
           <td><a href="https://he.wikipedia.org/wiki/${encodeURIComponent(edit.title)}" target="_blank">צפייה</a></td>
-          <td>${edit.user}</td>
+          <td><a href="https://he.wikipedia.org/wiki/User:${encodeURIComponent(edit.user)}" target="_blank">${edit.user}</a></td>
         `;
         tableBody.appendChild(row);
       });
@@ -121,7 +131,12 @@
         }
       });
 
-      updateSummaryTable();
+      const filtered = allEdits.filter(edit =>
+        edit.user.toLowerCase().includes(editorInput) &&
+        edit.title.toLowerCase().includes(pageInput)
+      );
+
+      updateSummaryTable(filtered);
     }
 
     function updateSummaryTable(edits) {
@@ -154,7 +169,7 @@
         row.innerHTML = `
           <td>${page}</td>
           <td>${data.count}</td>
-          <td>${new Date(data.latest).toLocaleString()}</td>
+          <td>${new Date(data.latest).toLocaleString('he-IL')}</td>
           <td><a href="https://he.wikipedia.org/wiki/${encodeURIComponent(page)}" target="_blank">צפייה</a></td>
         `;
         summaryTable.appendChild(row);
@@ -162,11 +177,14 @@
     }
 
     async function init() {
-      const edits = await fetchRecentChanges();
-      populateEditsTable(edits);
+      allEdits = await fetchRecentChanges();
+      populateEditsTable(allEdits);
     }
 
     init();
+
+    // רענון כל 30 שניות
+    setInterval(init, 30000);
   </script>
 
 </body>
