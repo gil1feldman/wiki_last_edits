@@ -54,6 +54,10 @@
       min-width: 300px;
     }
 
+    .full-width-box {
+      flex: 100%;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -115,26 +119,7 @@
     <!-- טבלת עורכים -->
     <div class="summary-box">
       <h2>10 העורכים הפעילים ביותר</h2>
-      <!-- טבלת עריכות -->
-<div class="summaries">
-  <div class="summary-box">
-    <h2>רשימת עריכות</h2>
-    <table id="editsTable">
-      <thead>
-        <tr>
-          <th>שם הערך</th>
-          <th>זמן העריכה</th>
-          <th>הערות</th>
-          <th>גודל השינוי</th>
-          <th>קישור להבדל</th>
-          <th>קישור לערך</th>
-          <th>שם העורך</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
-</div>
+      <table id="editorsTable">
         <thead>
           <tr>
             <th>שם העורך</th>
@@ -145,29 +130,32 @@
         <tbody></tbody>
       </table>
     </div>
-  </div>
 
-  <!-- טבלת עריכות -->
-  <table id="editsTable">
-    <thead>
-      <tr>
-        <th>שם הערך</th>
-        <th>זמן העריכה</th>
-        <th>הערות</th>
-        <th>גודל השינוי</th>
-        <th>קישור להבדל</th>
-        <th>קישור לערך</th>
-        <th>שם העורך</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+    <!-- טבלת עריכות ברוחב מלא -->
+    <div class="summary-box full-width-box">
+      <h2>רשימת עריכות</h2>
+      <table id="editsTable">
+        <thead>
+          <tr>
+            <th>שם הערך</th>
+            <th>זמן העריכה</th>
+            <th>הערות</th>
+            <th>גודל השינוי</th>
+            <th>קישור להבדל</th>
+            <th>קישור לערך</th>
+            <th>שם העורך</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
 
   <script>
     let allEdits = [];
 
     async function fetchRecentChanges() {
-      const url = 'https://he.wikipedia.org/w/api.php?action=query&format=json&list=recentchanges&rcnamespace=0&rclimit=500&rcprop=title|ids|sizes|user|comment|timestamp&origin=*';
+      const url = 'https://he.wikipedia.org/w/api.php?action=query&format=json&list=recentchanges&rcnamespace=0&rclimit=100&rcprop=title|ids|sizes|user|comment|timestamp&origin=*';
       const response = await fetch(url);
       const data = await response.json();
       return data.query.recentchanges;
