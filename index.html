@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>עריכות אחרונות בוויקיפדיה</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      margin: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: right;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    input {
+      margin: 5px;
+      padding: 5px;
+    }
+    .filter-section {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>עריכות אחרונות בוויקיפדיה</h1>
+
+  <div class="filter-section">
+    <label for="editorFilter">סנן לפי עורך:</label>
+    <input type="text" id="editorFilter" onkeyup="filterTable()" placeholder="שם העורך">
+
+    <label for="pageFilter">סנן לפי שם הערך:</label>
+    <input type="text" id="pageFilter" onkeyup="filterTable()" placeholder="שם הערך">
+  </div>
+
+  <table id="editsTable">
+    <thead>
+      <tr>
+        <th>שם הערך</th>
+        <th>זמן העריכה</th>
+        <th>הערות</th>
+        <th>גודל השינוי</th>
+        <th>קישור להבדל</th>
+        <th>קישור לערך</th>
+        <th>שם העורך</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- הנתונים יתווספו כאן -->
+    </tbody>
+  </table>
+
+  <h2>10 הערכים עם הכי הרבה עריכות</h2>
+
+  <table id="summaryTable">
+    <thead>
+      <tr>
+        <th>שם הערך</th>
+        <th>מספר עריכות</th>
+        <th>זמן עריכה אחרון</th>
+        <th>קישור לערך</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- הנתונים יתווספו כאן -->
+    </tbody>
+  </table>
+
+  <script>
+    async function fetchRecentChanges() {
+      const url = 'https://he.wikipedia.org/w/api.php?action=query&format=json&list=recentchanges&rcnamespace=0&rclimit=100&origin=*';
+      const response = await fetch(url);
+      const data = await response.json();
+      return data.query.recentchanges;
+    }
+
+    function populateEditsTable(edits) {
+      const tableBody = document.querySelector('#editsTable tbody');
+      tableBody.innerHTML = '';
+
+      edits.forEach(edit => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${edit.title}</td>
+          <td>${new Date(edit.timestamp).toLocaleString()}</td>
+          <td>${edit.comment || ''}</td>
+          <td>${edit.newlen - edit.oldlen}</td>
+          <td><a href="https://he.wikipedia.org/w/index.php?diff=${edit.revid}" target="_blank">הבדל</a></td>
+          <td><a href="https://he.wikipedia.org/wiki/${encodeURIComponent(edit.title)}" target="_blank">צפייה</a></td>
+          <td>${edit.user}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+
+      updateSummaryTable(edits);
+    }
+
+    function filterTable() {
+      const editorInput = document.getElementById('editorFilter').value.toLowerCase();
+      const pageInput = document.getElementById('pageFilter').value.toLowerCase();
+      const rows = document.querySelectorAll('#editsTable tbody tr');
+
+      rows.forEach(row => {
+        const editor = row.cells[6].textContent.toLowerCase();
+        const page = row.cells[0].textContent.toLowerCase();
+
+        if (editor.includes(editorInput) && page.includes(pageInput)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+
+      updateSummaryTable();
+    }
+
+    function updateSummaryTable(edits) {
+      const counts = {};
+
+      edits.forEach(edit => {
+        const page = edit.title;
+        const time = edit.timestamp;
+
+        if (!counts[page]) {
+          counts[page] = { count: 0, latest: time };
+        }
+
+        counts[page].count += 1;
+
+        if (new Date(time) > new Date(counts[page].latest)) {
+          counts[page].latest = time;
+        }
+      });
+
+      const summary = Object.entries(counts)
+        .sort((a, b) => b[1].count - a[1].count)
+        .slice(0, 10);
+
+      const summaryTable = document.querySelector('#summaryTable tbody');
+      summaryTable.innerHTML = '';
+
+      summary.forEach(([page, data]) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${page}</td>
+          <td>${data.count}</td>
+          <td>${new Date(data.latest).toLocaleString()}</td>
+          <td><a href="https://he.wikipedia.org/wiki/${encodeURIComponent(page)}" target="_blank">צפייה</a></td>
+        `;
+        summaryTable.appendChild(row);
+      });
+    }
+
+    async function init() {
+      const edits = await fetchRecentChanges();
+      populateEditsTable(edits);
+    }
+
+    init();
+  </script>
+
+</body>
+</html>
