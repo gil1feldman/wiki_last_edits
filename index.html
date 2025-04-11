@@ -10,6 +10,24 @@
       margin: 20px;
     }
 
+    h1 {
+      margin-bottom: 5px;
+    }
+
+    #summary-info {
+      font-size: 1.1em;
+      color: #555;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+
+    #refresh-btn {
+      font-size: 0.9em;
+      padding: 4px 10px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
     .filters {
       display: flex;
       gap: 20px;
@@ -65,12 +83,15 @@
 <body>
 
   <h1>עריכות אחרונות בוויקיפדיה</h1>
+  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    <div id="summary-info"></div>
+    <button id="refresh-btn" onclick="init()">🔄 רענון</button>
+  </div>
 
   <!-- שדות סינון -->
   <div class="filters">
     <input type="text" id="pageFilter" onkeyup="filterTable()" placeholder="🔎 סינון לפי שם הערך">
-    <input type="text" id="editorFilter" onkeyup="filterTable()" placeholder="🔎 סינון לפי שם העורך">
-      </div>
+  </div>
 
   <!-- טבלאות סיכום -->
   <div class="summaries">
@@ -93,6 +114,7 @@
     <!-- טבלת עורכים -->
     <div class="summary-box">
       <h2>10 העורכים הפעילים ביותר</h2>
+      <input type="text" id="editorFilter" onkeyup="filterTable()" placeholder="🔎 סינון לפי שם העורך" style="width: 100%; margin-bottom: 10px; padding: 6px; font-size: 14px;">
       <table id="editorsTable">
         <thead>
           <tr>
@@ -152,6 +174,25 @@
       });
 
       updateSummaryTables(edits);
+      updateSummaryInfo(edits);
+    }
+
+    function updateSummaryInfo(edits) {
+      const count = edits.length;
+      if (count === 0) return;
+
+      const times = edits.map(e => new Date(e.timestamp));
+      const minTime = new Date(Math.min(...times));
+      const maxTime = new Date(Math.max(...times));
+
+      const formatter = new Intl.DateTimeFormat('he-IL', {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+      });
+
+      const range = `${formatter.format(minTime)} – ${formatter.format(maxTime)}`;
+      const summaryText = `${count} עריכות אחרונות | ${range}`;
+      document.getElementById('summary-info').textContent = summaryText;
     }
 
     function filterTable() {
@@ -176,10 +217,11 @@
       );
 
       updateSummaryTables(filtered);
+      updateSummaryInfo(filtered);
     }
 
     function updateSummaryTables(edits) {
-      // סיכום לפי ערך
+      // ערכים
       const pages = {};
       edits.forEach(edit => {
         const title = edit.title;
@@ -208,7 +250,7 @@
         summaryBody.appendChild(row);
       });
 
-      // סיכום לפי עורך
+      // עורכים
       const editors = {};
       edits.forEach(edit => {
         const user = edit.user;
@@ -239,7 +281,6 @@
     }
 
     init();
-    setInterval(init, 30000);
   </script>
 
 </body>
