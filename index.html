@@ -10,6 +10,35 @@
       margin: 20px;
     }
 
+    header.topbar {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #eaeaea;
+      padding: 4px 16px;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      height: 50px;
+    }
+
+    .donate-button {
+      background-color: #d32f2f;
+      color: white;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 0.95em;
+    }
+
+    .donate-button:hover {
+      background-color: #b71c1c;
+    }
+
     h1 {
       margin-bottom: 10px;
     }
@@ -85,6 +114,12 @@
   </style>
 </head>
 <body>
+
+  <!-- באנר עליון -->
+  <header class="topbar">
+    <a href="https://beactive.co.il/project/80004" target="_blank" class="donate-button">תרומה למיזם "המצב הנתון"</a>
+    <img src="https://raw.githubusercontent.com/gil1feldman/my-form/main/logo_current_situation.png" alt="לוגו המיזם" class="logo">
+  </header>
 
   <h1>עריכות אחרונות בוויקיפדיה</h1>
 
