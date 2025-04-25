@@ -4,119 +4,30 @@
   <meta charset="UTF-8">
   <title>עריכות אחרונות בוויקיפדיה</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      direction: rtl;
-      margin: 20px;
-    }
-
-    header.topbar {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #eaeaea;
-      padding: 4px 16px;
-      box-sizing: border-box;
-      margin-bottom: 20px;
-    }
-
-    .logo {
-      height: 50px;
-    }
-
-    .donate-button {
-      background-color: #d32f2f;
-      color: white;
-      text-decoration: none;
-      padding: 6px 10px;
-      border-radius: 4px;
-      font-weight: bold;
-      font-size: 0.95em;
-    }
-
-    .donate-button:hover {
-      background-color: #b71c1c;
-    }
-
-    h1 {
-      margin-bottom: 10px;
-    }
-
-    .control-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    .control-bar input {
-      flex: 1;
-      min-width: 200px;
-      padding: 6px;
-      font-size: 15px;
-    }
-
-    #refresh-btn {
-      padding: 6px 12px;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    #summary-info {
-      font-size: 1.1em;
-      color: #555;
-      margin-bottom: 20px;
-    }
-
-    .summaries {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      margin-bottom: 30px;
-    }
-
-    .summary-box {
-      flex: 1;
-      min-width: 300px;
-    }
-
-    .full-width-box {
-      flex: 100%;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: right;
-    }
-
-    th {
-      background-color: #f2f2f2;
-    }
-
-    a {
-      color: #0645ad;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
+    body { font-family: Arial, sans-serif; direction: rtl; margin: 20px; }
+    header.topbar { width: 100%; display: flex; justify-content: space-between; align-items: center; background-color: #eaeaea; padding: 4px 16px; box-sizing: border-box; margin-bottom: 20px; }
+    .logo { height: 50px; }
+    .donate-button { background-color: #d32f2f; color: white; text-decoration: none; padding: 6px 10px; border-radius: 4px; font-weight: bold; font-size: 0.95em; }
+    .donate-button:hover { background-color: #b71c1c; }
+    h1 { margin-bottom: 10px; }
+    .control-bar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+    .control-bar input, .control-bar select { flex: 1; min-width: 180px; padding: 6px; font-size: 15px; }
+    #refresh-btn { padding: 6px 12px; font-size: 15px; cursor: pointer; }
+    #summary-info { font-size: 1.1em; color: #555; margin-bottom: 20px; }
+    .summaries { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 30px; }
+    .summary-box { flex: 1; min-width: 300px; }
+    .full-width-box { flex: 100%; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: right; }
+    th { background-color: #f2f2f2; }
+    a { color: #0645ad; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    #loadMore { margin-top: 10px; padding: 8px 16px; cursor: pointer; }
   </style>
 </head>
 <body>
 
-  <!-- באנר עליון -->
- <header class="topbar">
+<header class="topbar">
   <div style="display: flex; gap: 10px;">
     <a href="https://beactive.co.il/project/80004" target="_blank" class="donate-button">תרומה למיזם "המצב הנתון"</a>
     <a href="https://gil1feldman.github.io/my-form/" target="_blank" class="donate-button" style="background-color: #1976d2;">🔍 ניתוח ערך</a>
@@ -124,207 +35,176 @@
   <img src="https://raw.githubusercontent.com/gil1feldman/my-form/main/logo_current_situation.png" alt="לוגו המיזם" class="logo">
 </header>
 
-  <h1>עריכות אחרונות בוויקיפדיה</h1>
+<h1>עריכות אחרונות בוויקיפדיה</h1>
 
-  <!-- שורת שליטה -->
-  <div class="control-bar">
-    <input type="text" id="pageFilter" onkeyup="filterTable()" placeholder="🔎 סינון לפי שם הערך">
-    <button id="refresh-btn" onclick="init()">🔄 רענון</button>
-    <input type="text" id="editorFilter" onkeyup="filterTable()" placeholder="🔎 סינון לפי שם העורך">
+<div class="control-bar">
+  <input type="text" id="pageFilter" onkeyup="filterTable()" placeholder="🔎 סינון לפי שם הערך">
+  <select id="typeFilter" onchange="filterTable()">
+    <option value="">🔎 סינון לפי סוג עריכה</option>
+    <option value="יצירת ערך חדש">יצירת ערך חדש</option>
+    <option value="הוספה">הוספה</option>
+    <option value="הסרה">הסרה</option>
+    <option value="עריכה ללא שינוי בגודל">עריכה ללא שינוי בגודל</option>
+  </select>
+  <input type="text" id="editorFilter" onkeyup="filterTable()" placeholder="🔎 סינון לפי שם העורך">
+  <button id="refresh-btn" onclick="init()">🔄 רענון</button>
+</div>
+
+<div id="summary-info"></div>
+
+<div class="summaries">
+  <div class="summary-box">
+    <h2>10 הערכים עם הכי הרבה עריכות</h2>
+    <table id="summaryTable">
+      <thead>
+        <tr><th>שם הערך</th><th>מספר</th><th>זמן אחרון</th><th>קישור</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
   </div>
 
-  <!-- מידע על כמות וטווח -->
-  <div id="summary-info"></div>
-
-  <!-- טבלאות סיכום -->
-  <div class="summaries">
-    <!-- טבלת ערכים -->
-    <div class="summary-box">
-      <h2>10 הערכים עם הכי הרבה עריכות</h2>
-      <table id="summaryTable">
-        <thead>
-          <tr>
-            <th>שם הערך</th>
-            <th>מספר</th>
-            <th>זמן אחרון</th>
-            <th>קישור</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <!-- טבלת עורכים -->
-    <div class="summary-box">
-      <h2>10 העורכים הפעילים ביותר</h2>
-      <table id="editorsTable">
-        <thead>
-          <tr>
-            <th>שם העורך</th>
-            <th>מספר עריכות</th>
-            <th>קישור</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <!-- טבלת עריכות ברוחב מלא -->
-    <div class="summary-box full-width-box">
-      <h2>רשימת עריכות</h2>
-      <table id="editsTable">
-        <thead>
-          <tr>
-            <th>שם הערך</th>
-            <th>זמן העריכה</th>
-            <th>הערות</th>
-            <th>גודל השינוי</th>
-            <th>קישור להבדל</th>
-            <th>קישור לערך</th>
-            <th>שם העורך</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
+  <div class="summary-box">
+    <h2>10 העורכים הפעילים ביותר</h2>
+    <table id="editorsTable">
+      <thead>
+        <tr><th>שם העורך</th><th>מספר עריכות</th><th>קישור</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
   </div>
 
-  <script>
-    let allEdits = [];
+  <div class="summary-box full-width-box">
+    <h2>רשימת עריכות</h2>
+    <table id="editsTable">
+      <thead>
+        <tr><th>שם הערך</th><th>זמן העריכה</th><th>סוג עריכה</th><th>הערות</th><th>גודל השינוי</th><th>קישור להבדל</th><th>קישור לערך</th><th>שם העורך</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <button id="loadMore" onclick="loadMoreEdits()">טען עוד עריכות</button>
+  </div>
+</div>
 
-    async function fetchRecentChanges() {
-      const url = 'https://he.wikipedia.org/w/api.php?action=query&format=json&list=recentchanges&rcnamespace=0&rclimit=500&rcprop=title|ids|sizes|user|comment|timestamp&origin=*';
-      const response = await fetch(url);
-      const data = await response.json();
-      return data.query.recentchanges;
+<script>
+let allEdits = [];
+let displayedCount = 50;
+
+async function fetchRecentChanges() {
+  const url = 'https://he.wikipedia.org/w/api.php?action=query&format=json&list=recentchanges&rcnamespace=0&rclimit=500&rcprop=title|ids|sizes|user|comment|timestamp&origin=*';
+  const response = await fetch(url);
+  const data = await response.json();
+  return data.query.recentchanges;
+}
+
+function getEditType(edit) {
+  if (edit.oldlen === 0) return 'יצירת ערך חדש';
+  if (edit.newlen > edit.oldlen) return 'הוספה';
+  if (edit.newlen < edit.oldlen) return 'הסרה';
+  return 'עריכה ללא שינוי בגודל';
+}
+
+function populateEditsTable(edits) {
+  const tableBody = document.querySelector('#editsTable tbody');
+  tableBody.innerHTML = '';
+
+  const limitedEdits = edits.slice(0, displayedCount);
+
+  limitedEdits.forEach(edit => {
+    const row = document.createElement('tr');
+    const sizeChange = (edit.newlen ?? 0) - (edit.oldlen ?? 0);
+    const type = getEditType(edit);
+    row.innerHTML = `
+      <td>${edit.title}</td>
+      <td>${new Date(edit.timestamp).toLocaleString('he-IL')}</td>
+      <td>${type}</td>
+      <td>${edit.comment || ''}</td>
+      <td>${sizeChange > 0 ? '+' : ''}${sizeChange}</td>
+      <td><a href="https://he.wikipedia.org/w/index.php?diff=${edit.revid}" target="_blank">הבדל</a></td>
+      <td><a href="https://he.wikipedia.org/wiki/${encodeURIComponent(edit.title)}" target="_blank">צפייה</a></td>
+      <td><a href="https://he.wikipedia.org/wiki/User:${encodeURIComponent(edit.user)}" target="_blank">${edit.user}</a></td>
+    `;
+    tableBody.appendChild(row);
+  });
+}
+
+function updateSummaryInfo(edits) {
+  const count = edits.length;
+  if (count === 0) return;
+  const times = edits.map(e => new Date(e.timestamp));
+  const minTime = new Date(Math.min(...times));
+  const maxTime = new Date(Math.max(...times));
+  const formatter = new Intl.DateTimeFormat('he-IL', { dateStyle: 'medium', timeStyle: 'short' });
+  document.getElementById('summary-info').textContent = `${count} עריכות אחרונות | ${formatter.format(minTime)} – ${formatter.format(maxTime)}`;
+}
+
+function filterTable() {
+  const editorInput = document.getElementById('editorFilter').value.toLowerCase();
+  const pageInput = document.getElementById('pageFilter').value.toLowerCase();
+  const typeInput = document.getElementById('typeFilter').value;
+
+  const filtered = allEdits.filter(edit => {
+    const editorMatch = edit.user.toLowerCase().includes(editorInput);
+    const pageMatch = edit.title.toLowerCase().includes(pageInput);
+    const typeMatch = typeInput ? getEditType(edit) === typeInput : true;
+    return editorMatch && pageMatch && typeMatch;
+  });
+
+  displayedCount = 50;
+  populateEditsTable(filtered);
+  updateSummaryTables(filtered);
+  updateSummaryInfo(filtered);
+}
+
+function updateSummaryTables(edits) {
+  const pages = {};
+  edits.forEach(edit => {
+    const title = edit.title;
+    const time = edit.timestamp;
+    if (!pages[title]) pages[title] = { count: 0, latest: time };
+    pages[title].count++;
+    if (new Date(time) > new Date(pages[title].latest)) {
+      pages[title].latest = time;
     }
+  });
 
-    function populateEditsTable(edits) {
-      const tableBody = document.querySelector('#editsTable tbody');
-      tableBody.innerHTML = '';
+  const topPages = Object.entries(pages).sort((a, b) => b[1].count - a[1].count).slice(0, 10);
+  const summaryBody = document.querySelector('#summaryTable tbody');
+  summaryBody.innerHTML = '';
+  topPages.forEach(([title, data]) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `<td>${title}</td><td>${data.count}</td><td>${new Date(data.latest).toLocaleString('he-IL')}</td><td><a href="https://he.wikipedia.org/wiki/${encodeURIComponent(title)}" target="_blank">צפייה</a></td>`;
+    summaryBody.appendChild(row);
+  });
 
-      edits.forEach(edit => {
-        const row = document.createElement('tr');
-        const sizeChange = (edit.newlen ?? 0) - (edit.oldlen ?? 0);
-        row.innerHTML = `
-          <td>${edit.title}</td>
-          <td>${new Date(edit.timestamp).toLocaleString('he-IL')}</td>
-          <td>${edit.comment || ''}</td>
-          <td>${sizeChange > 0 ? '+' : ''}${sizeChange}</td>
-          <td><a href="https://he.wikipedia.org/w/index.php?diff=${edit.revid}" target="_blank">הבדל</a></td>
-          <td><a href="https://he.wikipedia.org/wiki/${encodeURIComponent(edit.title)}" target="_blank">צפייה</a></td>
-          <td><a href="https://he.wikipedia.org/wiki/User:${encodeURIComponent(edit.user)}" target="_blank">${edit.user}</a></td>
-        `;
-        tableBody.appendChild(row);
-      });
+  const editors = {};
+  edits.forEach(edit => {
+    const user = edit.user;
+    if (!editors[user]) editors[user] = 0;
+    editors[user]++;
+  });
 
-      updateSummaryTables(edits);
-      updateSummaryInfo(edits);
-    }
+  const topEditors = Object.entries(editors).sort((a, b) => b[1] - a[1]).slice(0, 10);
+  const editorsBody = document.querySelector('#editorsTable tbody');
+  editorsBody.innerHTML = '';
+  topEditors.forEach(([user, count]) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `<td>${user}</td><td>${count}</td><td><a href="https://he.wikipedia.org/wiki/User:${encodeURIComponent(user)}" target="_blank">פרופיל</a></td>`;
+    editorsBody.appendChild(row);
+  });
+}
 
-    function updateSummaryInfo(edits) {
-      const count = edits.length;
-      if (count === 0) return;
+function loadMoreEdits() {
+  displayedCount += 50;
+  filterTable();
+}
 
-      const times = edits.map(e => new Date(e.timestamp));
-      const minTime = new Date(Math.min(...times));
-      const maxTime = new Date(Math.max(...times));
+async function init() {
+  allEdits = await fetchRecentChanges();
+  filterTable();
+}
 
-      const formatter = new Intl.DateTimeFormat('he-IL', {
-        dateStyle: 'medium',
-        timeStyle: 'short',
-      });
-
-      const range = `${formatter.format(minTime)} – ${formatter.format(maxTime)}`;
-      const summaryText = `${count} עריכות אחרונות | ${range}`;
-      document.getElementById('summary-info').textContent = summaryText;
-    }
-
-    function filterTable() {
-      const editorInput = document.getElementById('editorFilter').value.toLowerCase();
-      const pageInput = document.getElementById('pageFilter').value.toLowerCase();
-      const rows = document.querySelectorAll('#editsTable tbody tr');
-
-      rows.forEach(row => {
-        const editor = row.cells[6].textContent.toLowerCase();
-        const page = row.cells[0].textContent.toLowerCase();
-
-        if (editor.includes(editorInput) && page.includes(pageInput)) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
-      });
-
-      const filtered = allEdits.filter(edit =>
-        edit.user.toLowerCase().includes(editorInput) &&
-        edit.title.toLowerCase().includes(pageInput)
-      );
-
-      updateSummaryTables(filtered);
-      updateSummaryInfo(filtered);
-    }
-
-    function updateSummaryTables(edits) {
-      const pages = {};
-      edits.forEach(edit => {
-        const title = edit.title;
-        const time = edit.timestamp;
-        if (!pages[title]) pages[title] = { count: 0, latest: time };
-        pages[title].count++;
-        if (new Date(time) > new Date(pages[title].latest)) {
-          pages[title].latest = time;
-        }
-      });
-
-      const topPages = Object.entries(pages)
-        .sort((a, b) => b[1].count - a[1].count)
-        .slice(0, 10);
-
-      const summaryBody = document.querySelector('#summaryTable tbody');
-      summaryBody.innerHTML = '';
-      topPages.forEach(([title, data]) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${title}</td>
-          <td>${data.count}</td>
-          <td>${new Date(data.latest).toLocaleString('he-IL')}</td>
-          <td><a href="https://he.wikipedia.org/wiki/${encodeURIComponent(title)}" target="_blank">צפייה</a></td>
-        `;
-        summaryBody.appendChild(row);
-      });
-
-      const editors = {};
-      edits.forEach(edit => {
-        const user = edit.user;
-        if (!editors[user]) editors[user] = 0;
-        editors[user]++;
-      });
-
-      const topEditors = Object.entries(editors)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 10);
-
-      const editorsBody = document.querySelector('#editorsTable tbody');
-      editorsBody.innerHTML = '';
-      topEditors.forEach(([user, count]) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${user}</td>
-          <td>${count}</td>
-          <td><a href="https://he.wikipedia.org/wiki/User:${encodeURIComponent(user)}" target="_blank">פרופיל</a></td>
-        `;
-        editorsBody.appendChild(row);
-      });
-    }
-
-    async function init() {
-      allEdits = await fetchRecentChanges();
-      populateEditsTable(allEdits);
-    }
-
-    init();
-  </script>
+init();
+</script>
 
 </body>
 </html>
