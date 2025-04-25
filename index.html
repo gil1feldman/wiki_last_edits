@@ -87,6 +87,7 @@
 
 <script>
 let allEdits = [];
+let filteredEdits = [];
 let displayedCount = 50;
 
 async function fetchRecentChanges() {
@@ -103,11 +104,11 @@ function getEditType(edit) {
   return 'עריכה ללא שינוי בגודל';
 }
 
-function populateEditsTable(edits) {
+function renderFilteredEdits() {
   const tableBody = document.querySelector('#editsTable tbody');
   tableBody.innerHTML = '';
 
-  const limitedEdits = edits.slice(0, displayedCount);
+  const limitedEdits = filteredEdits.slice(0, displayedCount);
 
   limitedEdits.forEach(edit => {
     const row = document.createElement('tr');
@@ -142,7 +143,7 @@ function filterTable() {
   const pageInput = document.getElementById('pageFilter').value.toLowerCase();
   const typeInput = document.getElementById('typeFilter').value;
 
-  const filtered = allEdits.filter(edit => {
+  filteredEdits = allEdits.filter(edit => {
     const editorMatch = edit.user.toLowerCase().includes(editorInput);
     const pageMatch = edit.title.toLowerCase().includes(pageInput);
     const typeMatch = typeInput ? getEditType(edit) === typeInput : true;
@@ -150,9 +151,9 @@ function filterTable() {
   });
 
   displayedCount = 50;
-  populateEditsTable(filtered);
-  updateSummaryTables(filtered);
-  updateSummaryInfo(filtered);
+  renderFilteredEdits();
+  updateSummaryTables(filteredEdits);
+  updateSummaryInfo(filteredEdits);
 }
 
 function updateSummaryTables(edits) {
@@ -195,7 +196,7 @@ function updateSummaryTables(edits) {
 
 function loadMoreEdits() {
   displayedCount += 50;
-  filterTable();
+  renderFilteredEdits();
 }
 
 async function init() {
